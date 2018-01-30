@@ -1,12 +1,11 @@
 class Bus
 
   attr_reader :number, :destination
-  attr_accessor :passengers
 
-  def initialize(number, destination, passengers)
+  def initialize(number, destination)
     @number = number
     @destination = destination
-    @passengers = passengers
+    @passengers = [] # add here rather than as param, if initializing empty
   end
 
   def drive
@@ -33,11 +32,18 @@ class Bus
     @passengers.clear
   end
 
-  def pick_up_from_stop(bus_stop)
-    for passenger in bus_stop.queue
-      @passengers.push(passenger)
-    end
-    bus_stop.queue.clear
-  end
+  # def pick_up_from_stop(bus_stop)
+  #   for passenger in bus_stop.queue
+  #     @passengers.push(passenger)
+  #   end
+  #   bus_stop.queue.clear
+  # end
 
+  # USE A COPY TO USE, THEN CALL ON BUS STOP TO CLEAR ITS OWN DATA
+  def pick_up_from_stop(bus_stop)
+    for passenger in bus_stop.get_queue_copy()
+      pick_up(passenger)
+    end
+    bus_stop.clear_queue # the bus stop is responsible for doing this
+  end
 end
